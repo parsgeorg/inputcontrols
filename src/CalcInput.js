@@ -35,13 +35,18 @@ class CalcInput extends Component {
     };
 
     setValue(ev) {
-        const value = document.querySelector('.set_value_field').value;
-        this.setState({value});
+        let value = document.querySelector('.set_value_calc_field').value;
+        value = this.calculate(value);
+        const text = value;
+        const isValid = validateNumeric(value) === '';
+        this.setState({text, value, isValid});
     }
 
     setText(ev) {
-        const text = document.querySelector('.set_text_field').value;
-        this.setState({text});
+        const text = document.querySelector('.set_text_calc_field').value;
+        const value = this.calculate(text);
+        const isValid = validateNumeric(value) === '';
+        this.setState({text, value, isValid});
     }
 
     isNumeric(n) {
@@ -109,7 +114,7 @@ class CalcInput extends Component {
         else {
             field.classList.remove('ok');
             field.classList.remove('err');
-            field.classList.add('erfocusInValidr');
+            field.classList.add('focusInValid');
         }
     };
 
@@ -148,9 +153,8 @@ class CalcInput extends Component {
     // };
 
     render() {
-
         const {text, value, isValid} = this.state;
-        console.log('render()');
+
         // console.log('state -> isValid -> ', isValid);
 
         // const customStyles = {
@@ -193,13 +197,13 @@ class CalcInput extends Component {
                 <div className="input-group mb-3">
                     <button onClick={(ev) => this.setValue(ev)}>Set value</button>
                     <input type="text"
-                           className="set_value_field form-control"
+                           className="set_value_calc_field form-control"
                     />
                 </div>
                 <div className="input-group mb-3">
                     <button onClick={(ev) => this.setText(ev)}>Set text</button>
                     <input type="text"
-                           className="set_text_field form-control"
+                           className="set_text_calc_field form-control"
                     />
                 </div>
             </div>

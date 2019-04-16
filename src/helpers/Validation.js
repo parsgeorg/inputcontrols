@@ -61,3 +61,36 @@ export const clearFileField = () => {
     }
   }
 };
+
+export const setFieldBorderOnFocus = (isFieldValid, fieldClass) => {
+
+  const field = document.querySelector(fieldClass);
+
+  if(isFieldValid) {
+    field.classList.remove('err');
+    field.classList.remove('focusInValid');
+    field.classList.add('ok');
+  }
+  else {
+    field.classList.remove('ok');
+    field.classList.remove('err');
+    field.classList.remove('calc-field');
+    field.classList.add('focusInValid');
+  }
+};
+
+export const setFieldBorderOnBlur = (isFieldValid, fieldClass) => {
+
+  const field = document.querySelector(fieldClass);
+
+  if(isFieldValid) {
+    field.classList.remove('err');
+    field.classList.remove('focusInValid');
+    field.classList.add('ok');
+  }
+  else {
+    field.classList.remove('ok');
+    field.classList.remove('focusInValid');
+    field.classList.add('err');
+  }
+};

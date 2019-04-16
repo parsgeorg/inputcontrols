@@ -1,6 +1,6 @@
 import React from 'react';
-import CalcInput from './CalcInput';
-import NumericInput from './NumericInput';
+import NumericInput from './Components/NumericInput/index';
+import CalcInput from './Components/CalcInput/index';
 
 const ControlLibCommon = ({typeField}) => {
     return (<div className="lib-controls">

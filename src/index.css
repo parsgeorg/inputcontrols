@@ -30,7 +30,7 @@ h1 {
 }
 
 .ok {
-  border:3px solid green;
+  border:1px solid green;
 }
 
 .err {
@@ -39,6 +39,7 @@ h1 {
 
 .focusInValid {
   border:3px solid red;
+  outline: none;
 }
 
 .input-group, .form-control {
@@ -50,11 +51,14 @@ h1 {
   margin-top: 2%;
 }
 
-input, .form-control:focus {
-  border: none;
+.ok.form-control:focus {
+  border:3px solid green;
   outline: none;
-  border-color:white; 
-  border-width:0;
+}
+
+.focusInValid.form-control:focus {
+  border:3px solid red;
+  outline: none;
 }
 
 .exp_value {

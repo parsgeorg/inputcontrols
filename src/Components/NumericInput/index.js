@@ -1,20 +1,23 @@
-import React, { Component } from 'react';
-import {validateNumeric, setFieldBorderOnFocus, setFieldBorderOnBlur} from '../../helpers/Validation';
+import React, {Component} from 'react';
+import {setFieldBorderOnBlur, setFieldBorderOnFocus, validateNumeric} from '../../helpers/Validation';
 import View from './View';
 
 class NumericInput extends Component {
     state = {
         valueNumericInput: '',
         textNumericInput: '',
-        isNumericValid: false,
+        isNumericValid: true,
         isNumericInputTouched: false
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        this.setFieldBorderOnFocus();
     }
 
     changeTextNumericInput(ev) {
         const textNumericInput = ev.target.value;
-        const valueNumericInput = Number(textNumericInput);
-        const isNumericValid = validateNumeric(valueNumericInput) === '';
-        this.setFieldBorderOnFocus();
+        const valueNumericInput = textNumericInput === '' ? '' : Number(textNumericInput);
+        const isNumericValid = valueNumericInput === '' || validateNumeric(valueNumericInput) === '';
         this.setState({textNumericInput, valueNumericInput, isNumericValid, isNumericInputTouched: true});
     }
 
@@ -43,7 +46,7 @@ class NumericInput extends Component {
     };
 
     render() {
-        const {valueNumericInput, textNumericInput, isNumericInputTouched, isNumericValid } = this.state;
+        const {valueNumericInput, textNumericInput, isNumericInputTouched, isNumericValid} = this.state;
         const {changeTextNumericInput, setValue, setText, setFieldBorderOnFocus, setFieldBorderOnBlur} = this;
 
         const changeTextNumeric = changeTextNumericInput.bind(this);
@@ -52,10 +55,13 @@ class NumericInput extends Component {
         const setFieldBorderByFocus = setFieldBorderOnFocus.bind(this);
         const setFieldBorderByBlur = setFieldBorderOnBlur.bind(this);
 
-        const data = {valueNumericInput, textNumericInput, isNumericInputTouched, isNumericValid,
-                    changeTextNumeric, defineValue, defineText, setFieldBorderByFocus, setFieldBorderByBlur }
+        const data = {
+            valueNumericInput, textNumericInput, isNumericInputTouched, isNumericValid,
+            changeTextNumeric, defineValue, defineText, setFieldBorderByFocus, setFieldBorderByBlur
+        }
         return <View {...data}/>
     }
+
 }
 
 export default NumericInput;

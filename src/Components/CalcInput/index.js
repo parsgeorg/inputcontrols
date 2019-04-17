@@ -1,21 +1,18 @@
-import React, {Component, useState} from 'react';
-import {validateNumeric, setFieldBorderOnFocus, setFieldBorderOnBlur} from '../../helpers/Validation';
+import React, {Component} from 'react';
+import {setFieldBorderOnBlur, setFieldBorderOnFocus, validateNumeric} from '../../helpers/Validation';
 import View from './View';
 
 class CalcInput extends Component {
-    /*•	If the text is empty, then the ‘value’ property value is null, isValid is true.
-    When the ‘value’ property is assigned with the new value in code, it updates the ‘text’
-    property value with the value string representation (empty string for a null value), and
-    isValid becomes true. If ‘value’ is assigned with an undefined value, it’s converted to a null value.
-    предусмотреть  Focused, invalid:
-    */
+
     state = {
         text: '',
         value: null,
         isValid: true
     }
 
-    //const [text, value, isValid] = useState([{ text: 'Learn Hooks' }]);
+    componentDidUpdate(prevProps, prevState) {
+        this.setFieldBorderOnFocus();
+    }
 
     _callSubscriber() {
         console.log('observer');
@@ -26,22 +23,19 @@ class CalcInput extends Component {
     }
 
     changeValue(ev) {
-        const text = ev.target.value ||  'null';
-        const value = this._calculate(text) || 'null';
-        const isValid = validateNumeric(value) === '';
+        const text = ev.target.value || '';
+        const value = this._calculate(text) || '';
+        const isValid = (text === '' && value === '') || validateNumeric(value) === '';
 
-        this.setFieldBorderOnFocus();
         this.setState({text, value, isValid});
-
     };
 
     setValue() {
         let value = document.querySelector('.set_value_calc_field').value;
-        value = this.calculate(value);
+        value = this._calculate(value);
         const text = value;
         const isValid = validateNumeric(value) === '';
         this.setState({text, value, isValid});
-
     }
 
     setText() {
@@ -56,7 +50,7 @@ class CalcInput extends Component {
             return NaN;
         }
         let number_group = function (sub) {
-            return sub=='' ? '' : '(' + sub + ')';
+            return sub == '' ? '' : '(' + sub + ')';
         };
         str = str.replace(/[\d]*/g, number_group);
         if (str.indexOf(')(') != -1) {
@@ -77,8 +71,6 @@ class CalcInput extends Component {
         const match_sum_diff = /(-?[\d\.]+)\s*([\+-])\s*(-?[\d\.]+)/g;
 
         let get_value = function (sub, exp) {
-            console.log('sub', sub);
-            console.log('exp', exp);
             while (exp.indexOf("^") !== -1)
                 exp = exp.replace(match_power, power);
             while (match_mult_div.test(exp))
@@ -88,10 +80,8 @@ class CalcInput extends Component {
             return exp;
         };
         while (str.indexOf("(") !== -1 && str.indexOf(")") !== -1) {
-            console.log('str >> ', str);
             // убираем скобки
             str = str.replace(/\(([^\(\)]*)\)/g, get_value);
-            console.log('str << ', str);
         }
 
         if (str.indexOf("(") !== -1 || str.indexOf(")") !== -1) {
@@ -119,10 +109,20 @@ class CalcInput extends Component {
         const setFieldBorderByFocus = setFieldBorderOnFocus.bind(this);
         const setFieldBorderByBlur = setFieldBorderOnBlur.bind(this);
 
-        const data = {text, value, isValid, changeVal, defineValue, defineText, setFieldBorderByFocus, setFieldBorderByBlur}
+        const data = {
+            text,
+            value,
+            isValid,
+            changeVal,
+            defineValue,
+            defineText,
+            setFieldBorderByFocus,
+            setFieldBorderByBlur
+        }
 
         return <View {...data} />
     }
+
 }
 
 export default CalcInput;

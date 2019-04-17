@@ -4,9 +4,8 @@ import CalcInput from './Components/CalcInput/index';
 
 const ControlLibCommon = ({typeField}) => {
     return (<div className="lib-controls">
-            {typeField === 'numeric' ? <NumericInput/> : <CalcInput/>}
-        </div>);
-
+        {typeField === 'numeric' ? <NumericInput/> : <CalcInput/>}
+    </div>);
 }
 
 export default ControlLibCommon;

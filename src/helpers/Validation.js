@@ -5,7 +5,8 @@ export const validateAlpabetical = value => {
 };
 
 export const validateNumeric = value => {
-    const numeric = new RegExp(/^[0-9]+$/i);
+    console.log('validateNumeric ->' + value)
+    const numeric = new RegExp(/^(\-)?[\d]+(\.\d+)?$/i);
     return numeric.test(value) ? '' : 'Только числа!';
 };
 
@@ -62,9 +63,8 @@ export const clearFileField = () => {
     }
 };
 
-export const setFieldBorderOnFocus = (isFieldValid, fieldClass) => {
-
-    const field = document.querySelector(fieldClass);
+export const setFieldBorderOnFocus = (isFieldValid, id) => {
+    const field = document.getElementById(id);
 
     if (isFieldValid) {
         field.classList.remove('err');
@@ -78,9 +78,8 @@ export const setFieldBorderOnFocus = (isFieldValid, fieldClass) => {
     }
 };
 
-export const setFieldBorderOnBlur = (isFieldValid, fieldClass) => {
-
-    const field = document.querySelector(fieldClass);
+export const setFieldBorderOnBlur = (isFieldValid, id) => {
+    const field = document.getElementById(id);
 
     if (isFieldValid) {
         field.classList.remove('err');

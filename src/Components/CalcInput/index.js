@@ -1,19 +1,26 @@
 import React, {Component} from 'react';
 import {setFieldBorderOnBlur, setFieldBorderOnFocus, validateNumeric} from '../../helpers/Validation';
+import calculate from '../../helpers/calc'
 import View from './View';
 
+
+/**component CalcInput */
 class CalcInput extends Component {
 
+    /**local state of this component*/
     state = {
         text: '',
-        value: null,
+        value: '',
         isValid: true
     }
 
+    /**component of life circle*/
     componentDidUpdate(prevProps, prevState) {
+         /**call function to set border of field on focus*/
         this.setFieldBorderOnFocus();
     }
 
+    /**this method and method subscribe can be used for subcribe on store changes - now is not active */
     _callSubscriber() {
         console.log('observer');
     }
@@ -22,84 +29,55 @@ class CalcInput extends Component {
         this._callSubscriber = observer;
     }
 
+    /**method - handler  for change val in input*/
     changeValue(ev) {
         const text = ev.target.value || '';
-        const value = this._calculate(text) || '';
-        const isValid = (text === '' && value === '') || validateNumeric(value) === '';
-
-        this.setState({text, value, isValid});
+        this._validateAndSet(text);
     };
 
+    /**method - handler  for set val in input*/
     setValue() {
-        let value = document.querySelector('.set_value_calc_field').value;
-        value = this._calculate(value);
-        const text = value;
-        const isValid = validateNumeric(value) === '';
-        this.setState({text, value, isValid});
+        const {id} = this.props;
+        let value = document.getElementById(`input_value_field_${id}`).value;
+        this.setState({value});
     }
 
+    /**method - handler  for set text in input*/
     setText() {
-        const text = document.querySelector('.set_text_calc_field').value;
-        const value = this.calculate(text);
-        const isValid = validateNumeric(value) === '';
+        const {id} = this.props;
+        const text = document.getElementById(`input_text_field_${id}`).value;
+        this._validateAndSet(text);
+    }
+
+    /**method - for validate and set value from inputs  in local state*/
+    _validateAndSet(text) {
+        const calculateValue = calculate(text);
+        let value = calculateValue === 0 ? 0 : calculateValue || 'null';
+        const isValid = (text === '' && value === 'null') || validateNumeric(value) === '';
+        if (!isValid) {
+            value = 'undefined';
+        }
+
         this.setState({text, value, isValid});
     }
 
-    _calculate(str) {
-        if (str.replace(/[\d+\-\/*\(\)]+/g, '').length > 0) {
-            return NaN;
-        }
-        let number_group = function (sub) {
-            return sub == '' ? '' : '(' + sub + ')';
-        };
-        str = str.replace(/[\d]*/g, number_group);
-        if (str.indexOf(')(') != -1) {
-            return NaN;
-        }
+    
 
-        let sum_or_diff = function (sub, a, sign, b) {
-            return sign === "-" ? a - b : +a + +b;
-        };
-        let mult_or_div = function (sub, a, sign, b) {
-            return sign === "*" ? a * b : a / b;
-        };
-        let power = function (sub, a, b) {
-            return Math.pow(a, b);
-        };
-        const match_power = /(-?[\d\.]+)\s*\^\s*(-?[\d\.]+)/g;
-        const match_mult_div = /(-?[\d\.]+)\s*([\*\/])\s*(-?[\d\.]+)/g;
-        const match_sum_diff = /(-?[\d\.]+)\s*([\+-])\s*(-?[\d\.]+)/g;
-
-        let get_value = function (sub, exp) {
-            while (exp.indexOf("^") !== -1)
-                exp = exp.replace(match_power, power);
-            while (match_mult_div.test(exp))
-                exp = exp.replace(match_mult_div, mult_or_div);
-            while (match_sum_diff.test(exp))
-                exp = exp.replace(match_sum_diff, sum_or_diff);
-            return exp;
-        };
-        while (str.indexOf("(") !== -1 && str.indexOf(")") !== -1) {
-            // убираем скобки
-            str = str.replace(/\(([^\(\)]*)\)/g, get_value);
-        }
-
-        if (str.indexOf("(") !== -1 || str.indexOf(")") !== -1) {
-            return NaN;
-        }
-
-        return parseInt(get_value("", str));
-    };
-
+    /**method - for set border of field by focus*/
     setFieldBorderOnFocus() {
-        setFieldBorderOnFocus(this.state.isValid, '.calc_field');
+        const {id} = this.props;
+        setFieldBorderOnFocus(this.state.isValid, `field_${id}`);
     };
 
+    /**method - for set border of field by blur*/
     setFieldBorderOnBlur() {
-        setFieldBorderOnBlur(this.state.isValid, '.calc_field');
+        const {id} = this.props;
+        setFieldBorderOnBlur(this.state.isValid, `field_${id}`);
     };
 
+    /**method - for render content of this component*/
     render() {
+        const {id} = this.props;
         const {text, value, isValid} = this.state;
         const {changeValue, setValue, setText, setFieldBorderOnFocus, setFieldBorderOnBlur} = this;
 
@@ -110,6 +88,7 @@ class CalcInput extends Component {
         const setFieldBorderByBlur = setFieldBorderOnBlur.bind(this);
 
         const data = {
+            id,
             text,
             value,
             isValid,

@@ -1,17 +1,19 @@
 import React from 'react';
-import ControlLibCommon from './ControlLibCommon';
+import ControlComponent from "./Components/ControlComponent/ControlComponent";
 
+/**main component of this app */
 const App = () => {
-    return (<div className="App">
-        <header className="header">
-            <h1>
-                Своя библиотека чисел
-            </h1>
-            <ControlLibCommon typeField="numeric"/>
-            <ControlLibCommon typeField="calc"/>
-        </header>
-        <button>Destroy all</button>
-    </div>);
+
+    return (
+        <div className="App">
+            <header className="header">
+                <h1>
+                    Input controls text
+                </h1>
+            </header>
+            <ControlComponent/>
+        </div>
+    );
 }
 
 export default App;

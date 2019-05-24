@@ -1,3 +1,4 @@
+/**this file is - enter point for app */
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
